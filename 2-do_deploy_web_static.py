@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 """script that generates a .tgz
 """
-from fabric.api import put, env, run
+from fabric.api import put, env, run, local
 from datetime import datetime
-import os.path
+from os.path import exists, isdir
 import re
 
 env.hosts = ['35.231.14.75', '54.242.226.110']
@@ -27,21 +27,20 @@ def do_deploy(archive_path):
     """that distributes an archive to your web servers
     """
 
-    if os.path.exists(archive_path):
+    if exists(archive_path) is False:
+        return False
+    try:
+        file_n = archive_path.split("/")[-1]
+        no_ext = file_n.split(".")[0]
+        path = "/data/web_static/releases/"
         put(archive_path, '/tmp/')
-        filename = re.search('versions/(.*).tgz', archive_path)
-        run('mkdir -p /data/web_static/releases/{}'.format(filename.group(1)))
-        run('tar -xzf /tmp/{}.tgz -C /data/web_static/releases/{}'
-            .format(filename.group(1), filename.group(1)))
-        run('rm /tmp/{}.tgz'.format(filename.group(1)))
-        run('mv /data/web_static/releases/{}/web_static/* \
-        /data/web_static/releases/{}/'
-            .format(filename.group(1), filename.group(1)))
-        run('rm -rf /data/web_static/releases/{}/web_static'
-            .format(filename.group(1)))
+        run('mkdir -p {}{}/'.format(path, no_ext))
+        run('tar -xzf /tmp/{} -C {}{}/'.format(file_n, path, no_ext))
+        run('rm /tmp/{}'.format(file_n))
+        run('mv {0}{1}/web_static/* {0}{1}/'.format(path, no_ext))
+        run('rm -rf {}{}/web_static'.format(path, no_ext))
         run('rm -rf /data/web_static/current')
-        run('ln -s /data/web_static/releases/{}/ /data/web_static/current'
-            .format(filename.group(1)))
+        run('ln -s {}{}/ /data/web_static/current'.format(path, no_ext))
         return True
-    else:
+    except:
         return False
