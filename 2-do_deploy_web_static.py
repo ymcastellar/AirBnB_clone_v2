@@ -27,9 +27,7 @@ def do_deploy(archive_path):
     """that distributes an archive to your web servers
     """
 
-    if not os.path.exists(archive_path):
-        return False
-    try:
+    if os.path.exists(archive_path):
         put(archive_path, '/tmp/')
         filename = re.search('versions/(.*).tgz', archive_path)
         run('mkdir -p /data/web_static/releases/{}'.format(filename.group(1)))
@@ -45,5 +43,5 @@ def do_deploy(archive_path):
         run('ln -s /data/web_static/releases/{}/ /data/web_static/current'
             .format(filename.group(1)))
         return True
-    except:
+    else:
         return False
