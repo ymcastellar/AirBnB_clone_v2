@@ -47,9 +47,8 @@ def do_deploy(archive_path):
 
 
 def deploy():
-    """Compress files in .tgz"""
-    pack = do_pack()
-    if pack is None:
+    """creates and distributes an archive to the web servers"""
+    archive_path = do_pack()
+    if archive_path is None:
         return False
-    dep = do_deploy(pack)
-    return dep
+    return do_deploy(archive_path)
