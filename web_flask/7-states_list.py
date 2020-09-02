@@ -11,11 +11,11 @@ app = Flask(__name__)
 def index():
     """display the states and cities """
     states = storage.all("State").values()
-    return render_template('8-cities_by_states.html', states=states)
+    return render_template('7-states_list.html', states=states)
 
 
 @app.teardown_appcontext
-def teardown_db(exception):
+def teardown_db(db):
     """close db"""
     storage.close()
 
