@@ -19,7 +19,7 @@ def cities_states():
     """display cities by states """
     states = storage.all(State)
     cities = storage.all(City)
-    return render_template('8-cities_by_states.html', states=states)
+    return render_template('8-cities_by_states.html', states=states, cities=cities)
 
 
 @app.teardown_appcontext

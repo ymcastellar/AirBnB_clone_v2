@@ -6,17 +6,17 @@
     <BODY>
         <H1>States</H1>
         <UL>
-            {% for item in states.values()|sort(attribute='name') %}
-            <LI>{{ item.id }}: <B>{{ item.name }}</B>
-                <UL>
-					{% for city in cities.values() | sort(attribute='name') -%}
-					{% if city.state_id == st.id %}
-						<LI>{{ city.id }}: <B>{{ city.name }}</B></LI>
+            {% for st in states.values() | sort(attribute='name') %}
+			<LI>{{ st.id }}: <B>{{ st.name }}</B>
+				<UL>
+					{% for ct in cities.values() | sort(attribute='name') -%}
+					{% if ct.state_id == st.id %}
+					<LI>{{ ct.id }}: <B>{{ ct.name }}</B></LI>
 					{% endif %}
-					{% endfor %}
-                </UL>
-            </LI>
-            {% endfor %}
+					{%- endfor %}
+				</UL>
+			</LI>
+			{% endfor %}
         </UL>
     </BODY>
 </HTML>
