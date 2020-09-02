@@ -9,19 +9,15 @@ from os import getenv
 
 
 class State(BaseModel, Base):
-    """State class."""       
-
-    if getenv('HBNB_TYPE_STORAGE') == 'db':
+    """State class."""
+    
+    if getenv("HBNB_TYPE_STORAGE") == 'db':
         __tablename__ = 'states'
         name = Column(String(128), nullable=False)
+
+    if getenv('HBNB_TYPE_STORAGE') == 'db':
         cities = relationship("City", backref="state",
                               cascade="all, delete-orphan")
-    else:
-        name = ""
-        
-    def __init__(self, *args, **kwargs):
-        """initializes state"""
-        super().__init__(*args, **kwargs)
 
     if getenv('HBNB_TYPE_STORAGE') != 'db':
         @property
